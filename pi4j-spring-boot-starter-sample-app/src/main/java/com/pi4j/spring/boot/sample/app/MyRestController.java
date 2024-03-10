@@ -11,14 +11,29 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MyRestController {
 
+    @Autowired
+    Khubaib khubaib;
+
     @GetMapping("/hello")
     public String hello(@RequestBody String name) {
         System.out.println("hello "+ name);
+        var console = new Console();
+        Context pi4j = Pi4J.newAutoContext();
+        PrintInfo.printLoadedPlatforms(console, pi4j);
+        PrintInfo.printDefaultPlatform(console, pi4j);
+        PrintInfo.printProviders(console, pi4j);
         return "hello "+name;
-//        var console = new Console();
-//        Context pi4j = Pi4J.newAutoContext();
-//        PrintInfo.printLoadedPlatforms(console, pi4j);
-//        PrintInfo.printDefaultPlatform(console, pi4j);
-//        PrintInfo.printProviders(console, pi4j);
+    }
+
+    @GetMapping("/stepper")
+    public void stepper() {
+        System.out.println("stepper called ");
+        var console = new Console();
+        try {
+            khubaib.start();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        System.out.println("stepper called after ");
     }
 }
